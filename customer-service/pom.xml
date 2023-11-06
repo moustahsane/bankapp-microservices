@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>me.moustahsane.bankapp</groupId>
-    <artifactId>account-service</artifactId>
+    <artifactId>customer-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>account-service</name>
-    <description>account-service</description>
+    <name>customer-service</name>
+    <description>customer-service</description>
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
@@ -57,10 +57,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
+
 
     </dependencies>
     <dependencyManagement>
@@ -80,14 +77,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
             </plugin>
         </plugins>
     </build>

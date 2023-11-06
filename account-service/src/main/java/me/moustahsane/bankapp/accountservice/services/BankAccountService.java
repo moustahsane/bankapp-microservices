@@ -2,8 +2,10 @@ package me.moustahsane.bankapp.accountservice.services;
 
 
 import lombok.RequiredArgsConstructor;
+import me.moustahsane.bankapp.accountservice.clients.CustomerFeignClient;
 import me.moustahsane.bankapp.accountservice.dtos.BankAccountDTO;
 import me.moustahsane.bankapp.accountservice.dtos.CurrentAccountDTO;
+import me.moustahsane.bankapp.accountservice.dtos.CustomerDTO;
 import me.moustahsane.bankapp.accountservice.dtos.SavingAccountDTO;
 import me.moustahsane.bankapp.accountservice.emuns.AccountStatus;
 import me.moustahsane.bankapp.accountservice.entities.BankAccount;
@@ -27,6 +29,7 @@ public class BankAccountService implements IBankAccountService {
 
     final BankAccountMapper mapper;
     final private BankAccountRepository bankAccountRepository;
+    final private CustomerFeignClient customerFeignClient;
     @Override
     public CurrentAccountDTO saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) {
         CurrentAccount dbBankAccount ;
@@ -75,12 +78,19 @@ public class BankAccountService implements IBankAccountService {
     @Override
     public BankAccountDTO getBankAccount(String idAccount) throws BankAccountNotExist {
         BankAccount bankAccount = getBankaccountNotExist(idAccount);
-        if(bankAccount instanceof  SavingAccount)
+        BankAccountDTO bankAccountDTO = new BankAccountDTO();
+
+       if(bankAccount instanceof  SavingAccount)
         {
-            return  mapper.savingBankAccountToSavingBankAccountDTO((SavingAccount) bankAccount);
+            bankAccountDTO =  (BankAccountDTO) mapper.savingBankAccountToSavingBankAccountDTO((SavingAccount) bankAccount);
         }else{
-            return  mapper.savingBankAccountToSavingBankAccountDTO((SavingAccount) bankAccount);
+            bankAccountDTO =   (BankAccountDTO) mapper.currentBankAccountToCurrentBankAccountDTO((CurrentAccount) bankAccount);
         }
+
+
+        CustomerDTO customer = customerFeignClient.findCustomerById(bankAccount.getCustomerId());
+        bankAccountDTO.setCustomer(customer);
+        return bankAccountDTO;
     }
 
     private BankAccount getBankaccountNotExist(String accountId) throws BankAccountNotExist {

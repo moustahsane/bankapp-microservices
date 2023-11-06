@@ -15,6 +15,7 @@ public class BankAccountDTO {
     private String type;
     private AccountStatus status;
     private  Long customerId;
+    private CustomerDTO customer;
 
 
 }
